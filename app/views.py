@@ -55,7 +55,11 @@ def text_request():
     resp.sms(returnmessage)
     return str(resp)
 
-
+@app.route("/callrequest", methods=['GET', 'POST'])
+def call_request():
+    resp = twilio.twiml.Response()
+    resp.say("DAVENPORT, DAVENPORT, WE ARE HERE. WE DON'T NEED NO FUCKING CHEER. DAVENPORT DAVENPORT WE ARE HERE. BEER BEER BEER BEER BEER BEER BEER")
+    return str(resp)
 
 
 
