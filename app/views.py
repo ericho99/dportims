@@ -63,6 +63,13 @@ def text_request():
             db.session.delete(user)
             db.session.commit()
             returnmessage = 'You have successfully been removed from the panlist.'
+        elif command == '@name':
+            if User.query.filter(User.name==body).first() is None and len(message) < 26:
+                user.name = body
+                db.session.commit()
+                returnmessage = 'Name change successful. Your new name is ' + body + '.'
+            else:
+                returnmessage = 'Name change failed. The name is taken or is longer than 25 characters.'
         elif command == '@user':
             returnmessage = 'got to user'
         else:
@@ -93,6 +100,13 @@ def text_request():
                     db.session.delete(user)
                     db.session.commit()
                     returnmessage = 'You have successfully been removed from the panlist.'
+                elif command == '@name':
+                    if User.query.filter(User.name==body).first() is None and len(message) < 26:
+                        user.name = body
+                        db.session.commit()
+                        returnmessage = 'Name change successful. Your new name is ' + body + '.'
+                    else:
+                        returnmessage = 'Name change failed. The name is taken or is longer than 25 characters.'
                 else:
                     returnmessage = 'Please enter a valid command. Text @commands for a list of valid commands.'
             else:

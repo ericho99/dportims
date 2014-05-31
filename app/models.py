@@ -11,7 +11,7 @@ class User(db.Model):
     panlist = db.relationship('Panlist', backref="users")
 
     def __repr__(self):
-        return '#%d: name: %s number: %s isAdmin: %d' % (self.id, self.number)
+        return '#%d: name: %s number: %s isAdmin: %d' % (self.id, self.name, self.number, self.admin)
 
 class Panlist(db.Model):
     __tablename__ = 'panlists'
