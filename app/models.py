@@ -7,11 +7,12 @@ class User(db.Model):
     number = db.Column(db.String(15))
     name = db.Column(db.String(26))
     admin = db.Column(db.Integer)
+    blocked = db.Column(db.Integer)
     panlist_id = db.Column(db.Integer, db.ForeignKey('panlists.id'))
-    panlist = db.relationship('Panlist', backref="users")
+    # panlist = db.relationship('Panlist', backref="users")
 
     def __repr__(self):
-        return '#%d: name: %s number: %s isAdmin: %d' % (self.id, self.name, self.number, self.admin)
+        return '#%d: name: %s number: %s panlist id: %d isAdmin: %d blocked: %d' % (self.id, self.name, self.number, self.panlist_id, self.admin, self.blocked)
 
 class Panlist(db.Model):
     __tablename__ = 'panlists'
