@@ -28,51 +28,84 @@ def index():
 @app.route('/textrequest', methods = ['GET','POST'])
 def text_request():
     from_number = request.values.get('From', None)
-    message = request.values.get('Body', None)
-
-    # if message.strip().lower() == 'remove':
-    #     u = User.query.filter(User.number==from_number).first()
-    #     if u is not None:
-    #         db.session.delete(u)
-    #         db.session.commit()
-    #     returnmessage = 'You have successfully been removed from the panlist'
-    # else:
-    #     #if it's an IM sec
-    #     if from_number in IMSECS:
-    #         for user in Panlist.query.filter(Panlist.name=='textlist').first().users:
-    #             client.messages.create(to=user.number, from_=SEND_NUMBER, body=IMSECS[from_number]+ ': ' + message)
-    #         returnmessage = 'Thanks for sending that mass text ' + IMSECS[from_number]
-    #     #if the number is not an IM sec number
-    #     else:
-    #         #if it's in there, just send a text to us with what they want to say
-    #         if User.query.filter(User.number==from_number).first() is not None:
-    #             for num in IMSECS:
-    #                 client.messages.create(to=num, from_=SEND_NUMBER, body=message)
-    #             returnmessage = 'The IM secs have received your message and thank you for your support.'
-    #         #add them to the panlist
-    #         else:
-    #             p = Panlist.query.filter(Panlist.name=='textlist').first()
-    #             u = User(number=from_number,panlist=p)
-    #             db.session.add(u)
-    #             db.session.commit()
-
-    #             returnmessage = 'Thanks for joining the DAVENPORT TYNG CUP panlist! This is our year to win it all, and this panlist will be used primarily as an emergency if we do not have enough players for a particular sport. Text the word "remove" if you want to be removed from the list. GO DPORT!'
+    message = request.values.get('Body', None).strip()
 
     p = Panlist.query.filter(Panlist.name=='textlist').first()
     user = User.query.filter(User.number==from_number).first()
     if user is not None and user.admin:
-        for u in User.query.filter(User.panlist==p):
-            client.messages.create(to=u.number, from_=SEND_NUMBER, body=message)
-        returnmessage = 'Mass text successfully sent'
-    else:
-        if User.query.filter(User.number==from_number).first() is not None:
-            for u in User.query.filter(User.panlist==p).filter(User.admin==True):
-                client.messages.create(to=u.number, from_=SEND_NUMBER, body=user.name + ': ' + message)
-        else:
-            u = User(number=from_number,name=message,admin=0,panlist=p)
-            db.session.add(u)
+        command = message.split(' ', 1)[0].strip().lower()
+        try:
+            body = message.split(' ', 1)[1].strip()
+        except:
+            body = None
+        if command == '@all':
+            if body == None or body == '':
+                returnmessage = 'Please enter a valid message.'
+            else:
+                for u in User.query.filter(User.panlist==p):
+                    client.messages.create(to=u.number, from_=SEND_NUMBER, body=body)
+                returnmessage = 'Mass text successfully sent'
+        elif command == '@commands' or command == '@command':
+            returnmessage = 'Here is a list of valid commands:' + '\n' + \
+                            '@add - adds a user, in the form of "number;name"' + '\n' + \
+                            '@all - sends a text to all users' + '\n' + \
+                            '@block - blocks the specified user from the panlist' + '\n' + \
+                            '@commands - brings up a list of commands' + '\n' + \
+                            '@info - shows your username and number' + '\n' + \
+                            '@leave - removes yourself from the panlist' + '\n' + \
+                            '@makeadmin - makes the specified user an admin' + '\n' + \
+                            '@name - changes name to the following phrase (max 25 chars)' + '\n' + \
+                            '@remove - removes the specified user from the panlist' + '\n' + \
+                            '@user - sends a text to the specified user after the command'
+        elif command == '@info':
+            returnmessage = 'Your username is ' + user.name + '. Your number is ' + from_number + '.'
+        elif command == '@leave':
+            db.session.delete(user)
             db.session.commit()
-            returnmessage = 'Thanks for joining the panlist, ' + message + '.'
+            returnmessage = 'You have successfully been removed from the panlist.'
+        elif command == '@user':
+            returnmessage = 'got to user'
+        else:
+            returnmessage = 'Please enter a valid command. Text @commands for a list of valid commands.'
+    else:
+        if message == '':
+            returnmessage = 'Please enter a valid message.'
+        elif user is not None:
+            if message[0] == '@':
+                command = message.split(' ', 1)[0].strip().lower()
+                try:
+                    body = message.split(' ', 1)[1].strip()
+                except:
+                    body = None
+
+                if command == '@add':
+                    returnmessage = 'Successfully requested ' + body + ' to join the group.'
+                elif command == '@commands' or command == '@command':
+                    returnmessage = 'Here is a list of valid commands:' + '\n' + \
+                                    '@add - adds a user to the list, in the form of "number;name"' + '\n' + \
+                                    '@commands - brings up a list of commands' + '\n' + \
+                                    '@info - shows your username and number' + '\n' + \
+                                    '@leave - removes yourself from the panlist' + '\n' + \
+                                    '@name - changes name to the following phrase (max 25 chars)'
+                elif command == '@info':
+                    returnmessage = 'Your username is ' + user.name + '. Your number is ' + from_number + '.'
+                elif command == '@leave':
+                    db.session.delete(user)
+                    db.session.commit()
+                    returnmessage = 'You have successfully been removed from the panlist.'
+                else:
+                    returnmessage = 'Please enter a valid command. Text @commands for a list of valid commands.'
+            else:
+                for u in User.query.filter(User.panlist==p).filter(User.admin==True):
+                    client.messages.create(to=u.number, from_=SEND_NUMBER, body=user.name + ': ' + message)
+        else:
+            if User.query.filter(User.name==message).first() is None and len(message) < 26:
+                u = User(number=from_number,name=message,admin=0,panlist=p)
+                db.session.add(u)
+                db.session.commit()
+                returnmessage = 'Thanks for joining the panlist, ' + message + '.'
+            else:
+                returnmessage = 'That name is taken or is invalid. Please enter a valid username of less than 25 characters.'
 
 
     resp = twilio.twiml.Response()
