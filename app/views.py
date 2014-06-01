@@ -38,7 +38,27 @@ def text_request():
             body = message.split(' ', 1)[1].strip()
         except:
             body = None
-        if command == '@all':
+        if command == '@add':
+            if body == None:
+                returnmessage = 'Please enter a valid user.'
+            else:
+                username2 = body.split(':', 1)[0].strip()
+                try:
+                    num = body.split(':', 1)[1].strip()
+                except:
+                    num = None
+                if num == None:
+                    returnmessage = 'Please enter a valid user/number combo in the form of username:number (case sensitive).'
+                elif User.query.filter(User.number==num).filter(User.panlist_id==p.id).first() is not None:
+                    returnmessage = 'This person is already part of the group.'
+                else:
+                    try:
+                        client.messages.create(to=num, from_=SEND_NUMBER, body='Welcome to Davenport IM Updates! Please text back with your name to confirm your membership in the group.')
+                    except:
+                        returnmessage = 'Please enter a valid user/number combo in the form of username:number (case sensitive).'
+                    else:
+                        returnmessage = 'Successfully requested ' + username2 + ' to join the group.'
+        elif command == '@all':
             if body == None or body == '':
                 returnmessage = 'Please enter a valid message.'
             else:
@@ -60,13 +80,13 @@ def text_request():
             returnmessage = 'Here is a list of valid commands:' + '\n' + \
                             '@add - adds a user, in the form of "number:name"' + '\n' + \
                             '@all - sends a text to all users' + '\n' + \
-                            '@block and @unblock - blocks/unblocks the specified user from the panlist' + '\n' + \
+                            '@block and @unblock - blocks/unblocks the specified user from the group' + '\n' + \
                             '@commands - brings up a list of commands' + '\n' + \
                             '@info - shows your username and number' + '\n' + \
-                            '@leave - removes yourself from the panlist' + '\n' + \
+                            '@leave - removes yourself from the group' + '\n' + \
                             '@makeadmin - makes the specified user an admin' + '\n' + \
                             '@name - changes name to the following phrase (max 25 chars)' + '\n' + \
-                            '@remove - removes the specified user from the panlist' + '\n' + \
+                            '@remove - removes the specified user from the group' + '\n' + \
                             '@search - searches usernames for keywords (empty search gives all users)' + '\n' + \
                             '@user - sends a text to the specified user after the command (message separated by a colon)'
         elif command == '@deadmin':
@@ -85,7 +105,7 @@ def text_request():
         elif command == '@leave':
             db.session.delete(user)
             db.session.commit()
-            returnmessage = 'You have successfully been removed from the panlist.'
+            returnmessage = 'You have successfully left the group.'
         elif command == '@makeadmin':
             user2 = User.query.filter(User.name==body).filter(User.panlist_id==p.id).first()
             if user2 is not None:
@@ -110,7 +130,7 @@ def text_request():
             if user2 is not None:
                 db.session.delete(user2)
                 db.session.commit()
-                returnmessage = 'You have successfully removed ' + user2.name + ' from the panlist.'
+                returnmessage = 'You have successfully removed ' + user2.name + ' from the group.'
             else:
                 returnmessage = 'Please specify a valid user to remove.'
         elif command == '@search':
@@ -155,7 +175,7 @@ def text_request():
                 u = User(number=from_number,name=message,admin=0,panlist_id=p.id,blocked=0)
                 db.session.add(u)
                 db.session.commit()
-                returnmessage = 'Thanks for joining the panlist, ' + message + '.'
+                returnmessage = 'Welcome to Davenport IM Updates ' + message + '. Text @commands for a list of valid commands, or @leave to leave the group.'
             else:
                 returnmessage = 'That name is taken or is invalid. Please enter a valid username of less than 25 characters.'
         elif user.blocked == 1:
@@ -169,20 +189,38 @@ def text_request():
                     body = None
 
                 if command == '@add':
-                    returnmessage = 'Successfully requested ' + body + ' to join the group.'
+                    if body == None:
+                        returnmessage = 'Please enter a valid user.'
+                    else:
+                        username2 = body.split(':', 1)[0].strip()
+                        try:
+                            num = body.split(':', 1)[1].strip()
+                        except:
+                            num = None
+                        if num == None:
+                            returnmessage = 'Please enter a valid user/number combo in the form of username:number (case sensitive).'
+                        elif User.query.filter(User.number==num).filter(User.panlist_id==p.id).first() is not None:
+                            returnmessage = 'This person is already part of the group.'
+                        else:
+                            try:
+                                client.messages.create(to=num, from_=SEND_NUMBER, body='Welcome to Davenport IM Updates! Please text back with your name to confirm your membership in the group.')
+                            except:
+                                returnmessage = 'Please enter a valid user/number combo in the form of username:number (case sensitive).'
+                            else:
+                                returnmessage = 'Successfully requested ' + username2 + ' to join the group.'
                 elif command == '@commands' or command == '@command':
                     returnmessage = 'Here is a list of valid commands:' + '\n' + \
                                     '@add - adds a user to the list, in the form of "number;name"' + '\n' + \
                                     '@commands - brings up a list of commands' + '\n' + \
                                     '@info - shows your username and number' + '\n' + \
-                                    '@leave - removes yourself from the panlist' + '\n' + \
+                                    '@leave - removes yourself from the group' + '\n' + \
                                     '@name - changes name to the following phrase (max 25 chars)'
                 elif command == '@info':
                     returnmessage = 'Your username is ' + user.name + '. Your number is ' + from_number + '.'
                 elif command == '@leave':
                     db.session.delete(user)
                     db.session.commit()
-                    returnmessage = 'You have successfully been removed from the panlist.'
+                    returnmessage = 'You have successfully left the group.'
                 elif command == '@name':
                     if User.query.filter(User.name==body).filter(User.panlist_id==p.id).first() is None and len(message) < 26:
                         user.name = body
@@ -195,6 +233,7 @@ def text_request():
             else:
                 for u in User.query.filter(User.panlist_id==p.id).filter(User.admin==True):
                     client.messages.create(to=u.number, from_=SEND_NUMBER, body=user.name + ': ' + message)
+                returnmessage = None
 
 
     resp = twilio.twiml.Response()
