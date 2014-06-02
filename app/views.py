@@ -2,7 +2,7 @@ from app import app
 from app.models import *
 from flask import render_template
 from flask import Flask, request, redirect
-import twilio.twiml,os
+import twilio.twiml,os,re
 from twilio.rest import TwilioRestClient
 
 TWILIO_ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
@@ -37,7 +37,7 @@ def text_request():
         try:
             body = message.split(' ', 1)[1].strip()
         except:
-            body = None
+            body = ''
         if command == '@add':
             if body == None:
                 returnmessage = 'Please enter a valid user.'
@@ -134,7 +134,15 @@ def text_request():
             else:
                 returnmessage = 'Please specify a valid user to remove.'
         elif command == '@search':
-            returnmessage = 'have not implemented search yet it is too hard'
+            returnmessage = ''
+            temp = User.query.filter(User.panlist_id==p.id)
+            if temp == None: #shouldn't ever get here but whatever
+                returnmessage = 'No users in this group.'
+            else:
+                pattern = re.compile(body,re.IGNORECASE)
+                for u in User.query.filter(User.panlist_id==p.id):
+                    if pattern.search(u.name) is not None:
+                        returnmessage = returnmessage + u.name + '\n'
         elif command == '@unblock':
             user2 = User.query.filter(User.name==body).filter(User.panlist_id==p.id).first()
             if user2 is not None:
@@ -148,7 +156,7 @@ def text_request():
             else:
                 returnmessage = 'Please specify a valid user to unblock.'            
         elif command == '@user':
-            if body == None:
+            if body == '':
                 returnmessage = 'Please enter a valid user.'
             else:
                 username2 = body.split(':', 1)[0].strip()
