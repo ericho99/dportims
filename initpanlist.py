@@ -3,7 +3,7 @@ from app.models import *
 
 INITLIST = {
     # "+15038872891": "Eric",
-    "+15038939333": "ericcc",
+    "+15038939333": "Eric Ho",
     # "+13037178692": "Maren",
     # "+13048905251": "Connor",
     # "+17082978240": "Julianne",

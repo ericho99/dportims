@@ -9,15 +9,6 @@ TWILIO_ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
 TWILIO_AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
 client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
-IMSECS = {
-    "+15038872891": "Eric",
-    # "+13037178692": "Maren",
-    # "+13048905251": "Connor",
-    # "+17082978240": "Julianne",
-    # "+16107375637": "Claire",
-    # "+16086954412": "Fabi",
-}
-
 SEND_NUMBER = "+12035990002" #change to the appropriate number, depending on if it's in test mode or not
 
 @app.route('/')
@@ -58,11 +49,18 @@ def text_request():
                         returnmessage = 'Please enter a valid user/number combo in the form of username:number (case sensitive).'
                     else:
                         returnmessage = 'Successfully requested ' + username2 + ' to join the group.'
+        elif command == '@admins':
+            if body == None or body == '':
+                returnmessage = 'Please enter a valid message.'
+            else:
+                for u in User.query.filter(User.panlist_id==p.id).filter(User.admin==True).filter(User.number!=from_number):
+                    client.messages.create(to=u.number, from_=SEND_NUMBER, body='@adminonly ' + user.name + ': ' + body)
+                returnmessage = None
         elif command == '@all':
             if body == None or body == '':
                 returnmessage = 'Please enter a valid message.'
             else:
-                for u in User.query.filter(User.panlist_id==p.id):
+                for u in User.query.filter(User.panlist_id==p.id).filter(User.number!=from_number):
                     client.messages.create(to=u.number, from_=SEND_NUMBER, body=body)
                 returnmessage = 'Mass text successfully sent'
         elif command == '@block':
@@ -79,6 +77,7 @@ def text_request():
         elif command == '@commands' or command == '@command':
             returnmessage = 'Here is a list of valid commands:' + '\n' + \
                             '@add - adds a user, in the form of "number:name"' + '\n' + \
+                            '@admins - sends a text to all admins' + '\n' + \
                             '@all - sends a text to all users' + '\n' + \
                             '@block and @unblock - blocks/unblocks the specified user from the group' + '\n' + \
                             '@commands - brings up a list of commands' + '\n' + \
@@ -183,7 +182,7 @@ def text_request():
                 u = User(number=from_number,name=message,admin=0,panlist_id=p.id,blocked=0)
                 db.session.add(u)
                 db.session.commit()
-                returnmessage = 'Welcome to Davenport IM Updates ' + message + '. Text @commands for a list of valid commands, or @leave to leave the group.'
+                returnmessage = 'Welcome to Davenport IM Updates, ' + message + '. Text @commands for a list of valid commands, or @leave to leave the group. Messages you send to this number will be sent directly to the Intramural Secretaries.'
             else:
                 returnmessage = 'That name is taken or is invalid. Please enter a valid username of less than 25 characters.'
         elif user.blocked == 1:
@@ -218,7 +217,7 @@ def text_request():
                                 returnmessage = 'Successfully requested ' + username2 + ' to join the group.'
                 elif command == '@commands' or command == '@command':
                     returnmessage = 'Here is a list of valid commands:' + '\n' + \
-                                    '@add - adds a user to the list, in the form of "number;name"' + '\n' + \
+                                    '@add - adds a user to the list, in the form of "number:name"' + '\n' + \
                                     '@commands - brings up a list of commands' + '\n' + \
                                     '@info - shows your username and number' + '\n' + \
                                     '@leave - removes yourself from the group' + '\n' + \
@@ -248,11 +247,11 @@ def text_request():
     resp.sms(returnmessage)
     return str(resp)
 
-@app.route("/callrequest", methods=['GET', 'POST'])
-def call_request():
-    resp = twilio.twiml.Response()
-    resp.say("DAVENPORT, DAVENPORT, WE ARE HERE. WE DON'T NEED NO FUCKING CHEER. DAVENPORT DAVENPORT WE ARE HERE. BEER BEER BEER BEER BEER BEER BEER")
-    return str(resp)
+# @app.route("/callrequest", methods=['GET', 'POST'])
+# def call_request():
+#     resp = twilio.twiml.Response()
+#     resp.say("DAVENPORT, DAVENPORT, WE ARE HERE. WE DON'T NEED NO FUCKING CHEER. DAVENPORT DAVENPORT WE ARE HERE. BEER BEER BEER BEER BEER BEER BEER")
+#     return str(resp)
 
 
 
