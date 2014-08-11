@@ -1,0 +1,2 @@
+1. Number matching - numbers are stored with extensions included, and matched by adding +1 to the front of the user entered generic 10 digit number
+2. With added characters, sent messages could exceed 160 characters
