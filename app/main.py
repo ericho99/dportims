@@ -44,7 +44,7 @@ def main(from_number, message, pid, user):
         elif command == '@deadmin':
             return deadmin(body, pid)
         elif command == '@info':
-            return 'Your username is ' + user.name + '. Your number is ' + from_number + '.'
+            return 'Your username is ' + user.name + '. Stop bothering me.'
         elif command == '@leave':
             return leave(user)
         elif command == '@makeadmin':
@@ -87,7 +87,7 @@ def main(from_number, message, pid, user):
                            '@leave - removes yourself from the group' + '\n' + \
                            '@name - changes name to the following phrase (max 25 chars)'
                 elif command == '@info':
-                    return 'Your username is ' + user.name + '. Your number is ' + from_number + '.'
+                    return 'Your username is ' + user.name + ' and you are an IM superstar. Don\'t let anyone tell you otherwise.'
                 elif command == '@leave':
                     return leave(user)
                 elif command == '@name':
