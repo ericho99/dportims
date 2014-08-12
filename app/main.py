@@ -139,7 +139,7 @@ def all_command(from_number, body, pid):
 
 def block(body, pid):
     user = get_user_by_string(body, pid)
-    if user is not None:
+    if user is not None and not user.admin:
         if user.blocked == 1:
             return user.name + ' is already blocked.'
         else:
@@ -152,7 +152,7 @@ def deadmin(body, pid):
     user = get_user_by_string(body, pid)
     if user is not None:
         if user.admin == 0:
-            return user2.name + ' is not an admin.'
+            return user.name + ' is not an admin.'
         else:
             user.admin = 0
             db.session.commit()
@@ -177,7 +177,7 @@ def makeadmin(body, pid, username):
     return 'Please specify a valid user to make an admin.'
 
 def name_change(body, pid, user):
-    if not is_user_by_string(body, pid) and len(message) < 26:
+    if not is_user_by_string(body, pid) and len(body) < 26 and body != '':
         user.name = body
         db.session.commit()
         return 'Name change successful. Your new name is ' + body + '.'
@@ -185,7 +185,7 @@ def name_change(body, pid, user):
 
 def remove(body, pid):
     user = get_user_by_string(body, pid)
-    if user is not None:
+    if user is not None and not user.admin:
         db.session.delete(user)
         db.session.commit()
         return 'You have successfully removed ' + user.name + ' from the group.'
@@ -197,10 +197,12 @@ def search(body, pid):
     for u in User.query.filter(User.panlist_id==pid):
         if pattern.search(u.name) is not None:
             returnmessage = returnmessage + u.name + '\n'
+    if returnmessage == '':
+        return 'No users found.'
     return returnmessage
 
 def store_user(message, pid, from_number):
-    if not is_user_by_string(message) and len(message) < 26:
+    if not is_user_by_string(message, pid) and len(message) < 26:
         u = User(number=from_number, name=message, admin=0, panlist_id=pid, blocked=0)
         db.session.add(u)
         db.session.commit()
@@ -220,7 +222,7 @@ def unblock(body, pid):
     return 'Please specify a valid user to unblock.'
 
 def user_message(body, pid):
-    if body == '':
+    if body == None or body == '':
         return 'Please enter a valid user.'
     else:
         username = body.split(':', 1)[0].strip()
