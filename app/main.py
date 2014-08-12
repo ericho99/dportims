@@ -126,7 +126,7 @@ def admins(from_number, body, pid, username):
     if body == None or body == '':
         return 'Please enter a valid message.'
 
-    for u in User.query.filter(User.panlist_id==pid).filter(User.admin==True).filter(User.number!=from_number):
+    for u in User.query.filter(User.panlist_id==pid).filter(User.admin==1).filter(User.number!=from_number):
         client.messages.create(to=u.number, from_=SEND_NUMBER, body='@adminonly ' + username + ': ' + body)
     return None
 
