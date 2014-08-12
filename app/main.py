@@ -95,8 +95,9 @@ def main(from_number, message, pid, user):
                 else:
                     return 'Please enter a valid command. Text @commands for a list of valid commands.'
             else:
-                for u in User.query.filter(User.panlist_id==pid).filter(User.admin==True):
+                for u in User.query.filter(User.panlist_id==pid).filter(User.admin==1):
                     client.messages.create(to=u.number, from_=SEND_NUMBER, body=user.name + ': ' + message)
+                return None
     return None
 
 def add(body, pid):
