@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    <h1>
+    {% if sport == 1%}
+      men's soccer
+    {% elif sport == 2%}
+      women's soccer
+    {% elif sport == 3%}
+      men's football
+    {% elif sport == 4%}
+      coed football
+    {% elif sport == 5%}
+      table tennis
+    {% elif sport == 6%}
+      coed tennis
+    {% elif sport == 7%}
+      coed volleyball
+    {% elif sport == 8%}
+      golf
+    {% elif sport == 9%}
+      cross country
+    {% endif %}
+    </h1>
+    <br>
+    <a type="button" class="category-link btn btn-primary btn-lg" href="/index">RSVP</a>
+  </div>
+{% endblock %}

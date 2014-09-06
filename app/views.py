@@ -10,6 +10,11 @@ import twilio.twiml
 def index():
     return render_template('page.html')
 
+@app.route('/sports')
+@app.route('/sports/<int:sport>')
+def sports(sport=1):
+    return render_template('sport.html', sport=sport)
+
 @app.route('/textrequest', methods = ['GET','POST'])
 def text_request():
     from_number = request.values.get('From', None)

@@ -1,0 +1,13 @@
+body{
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+.container{
+	text-align: center;
+}
+.sport-button{
+	height: 100px;
+	width: 200px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

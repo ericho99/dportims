@@ -1,3 +1,17 @@
-<h1>
-	Welcome to the Eric Ho experience.
-</h1>
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    <h1>let's get started</h1>
+    <a type="button" class="btn btn-lg sport-button btn-primary" href="/sports/1">men's soccer</a>
+    <a type="button" class="btn btn-lg sport-button btn-warning" href="/sports/2">women's soccer</a>
+    <a type="button" class="btn btn-lg sport-button btn-success" href="/sports/3">men's football</a>
+    <br>
+    <a type="button" class="btn btn-lg sport-button btn-danger" href="/sports/4">coed football</a>
+    <a type="button" class="btn btn-lg sport-button btn-info" href="/sports/5">table tennis</a>
+    <a type="button" class="btn btn-lg sport-button btn-primary" href="/sports/6">coed tennis</a>
+    <br>
+    <a type="button" class="btn btn-lg sport-button btn-warning" href="/sports/7">coed volleyball</a>
+    <a type="button" class="btn btn-lg sport-button btn-success" href="/sports/8">golf</a>
+    <a type="button" class="btn btn-lg sport-button btn-danger" href="/sports/9">cross country</a>
+  </div>
+{% endblock %}
