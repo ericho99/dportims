@@ -12,7 +12,29 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
   </head>
-  <body>
+  <body id="bgc">
+    <div class="header">
+      <a href='/'>
+        <img alt="Logo" id="crest" src="../static/imgs/shield.jpeg">
+      </a>
+      <h3>
+        DPORT IM DOMINATION
+      </h3>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+          Welcome, Eric
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="/">Home</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">My IMs</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Contact Us</a></li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+
     {% block content %}{% endblock %}
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
