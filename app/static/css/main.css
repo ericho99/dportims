@@ -1,5 +1,4 @@
 body{
-	background-color: blue;
 	text-align: center;
 	padding-top: 20px;
 	padding-bottom: 20px;
@@ -16,17 +15,33 @@ body{
 	padding-top: 40px;
 }
 
+.game-table{
+	margin-left: 100px;
+}
+
+.table.game-table{
+	max-width: 80%;
+}
+
+.btn-rsvp{
+	float:left;
+}
+
+.btn-player{
+	margin-left:15px;
+}
+
 .btn.sport-button{
 	padding-top: 28px;
+}
+
+.littlecrest{
+	height:30px;
 }
 
 #crest{
 	height: 150px;
 	float: left;
-}
-
-#bgc{
-	background-color: #fffef4;
 }
 
 .header{
@@ -39,4 +54,8 @@ body{
 
 h3{
 	float: middle;
+}
+
+td{
+	text-align: left;
 }

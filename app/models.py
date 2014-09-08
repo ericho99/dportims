@@ -30,7 +30,7 @@ class Game(db.Model):
     versus = db.Column(db.String(3))
 
     def __repr__(self):
-        return '#%d: Game: %d date: %s versus: ' % (self.id, self.sport, self.date, self.versus)
+        return '#%d: Game: %d date: %s versus: %s' % (self.id, self.sport, self.date, self.versus)
 
 class Player(db.Model):
     __tablename__ = 'players'
@@ -39,4 +39,16 @@ class Player(db.Model):
 
     def __repr__(self):
         return '#%d: Email: %s' % (self.id, self.email)
+
+class Attendance(db.Model):
+    __tablename__ = 'attendances'
+    id = db.Column(db.Integer, primary_key=True)
+    game_id = db.Column(db.Integer, db.ForeignKey('games.id'))
+    player_id = db.Column(db.Integer, db.ForeignKey('players.id'))
+
+    def __repr__(self):
+        return '#%d: game_id: %d player_id: %d' % (self.id, self.game_id, self.player_id)
+
+
+
 

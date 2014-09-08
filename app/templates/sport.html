@@ -23,6 +23,27 @@
     {% endif %}
     </h1>
     <br>
-    <a type="button" class="category-link btn btn-primary btn-lg" href="/index">RSVP</a>
+    <table class="table game-table">
+      <thead>
+        <th>Date</th>
+        <th>VS</th>
+        <th>RSVP</th>
+      </thead>
+      <tbody>
+        {% for game in games %}
+          <tr>
+            <td>{{game.date}}</td>
+            <td>{{game.versus}}</td>
+            <td>
+              <form action="/rsvp/{{sport}}" method="POST">
+                <button type="button" class="btn btn-primary btn-lg btn-rsvp">RSVP</button>
+              </form>
+              <a type="button" class="btn btn-primary btn-lg btn-player" href='/playerlist/{{game.id}}'>see player list</a>
+            </td>
+          </tr>
+          </div>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 {% endblock %}

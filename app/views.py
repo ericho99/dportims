@@ -13,7 +13,27 @@ def index():
 @app.route('/sports')
 @app.route('/sports/<int:sport>')
 def sports(sport=1):
-    return render_template('sport.html', sport=sport)
+    games = Game.query.filter(Game.sport==sport)
+    player_id = 1
+    return render_template('sport.html', sport=sport, games=games, player_id=player_id)
+
+@app.route('/playerlist/<int:gameid>')
+def player_list(gameid):
+    game = Game.query.filter(Game.id==gameid).first()
+    player_list = Attendance.query.filter(Attendance.game_id==gameid)
+    email_list = []
+    for att in player_list:
+        email_list.append(Player.query.get(att.player_id).email)
+    return render_template('playerlist.html', game=game, player_list=email_list)
+
+@app.route('/rsvp/<int:gameid>', methods = ['POST'])
+def rsvp(gameid):
+    player_id = 1
+    if Attendance.query.filter(Attendance.game_id==gameid).filter(Attendance.player_id==player_id) is None:
+        a = Attendance(game_id=gameid,player_id=player_id)
+        db.session.add(a)
+        db.session.commit()
+    return
 
 @app.route('/textrequest', methods = ['GET','POST'])
 def text_request():
