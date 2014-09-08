@@ -15,6 +15,11 @@ body{
 	padding-top: 40px;
 }
 
+#contact{
+	width: 550px;
+	margin-top: 150px;
+}
+
 .game-table{
 	margin-left: 100px;
 }
@@ -59,3 +64,9 @@ h3{
 td{
 	text-align: left;
 }
+
+.dropdown{
+	float: right;
+}
+
+

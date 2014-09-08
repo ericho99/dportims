@@ -35,9 +35,15 @@
             <td>{{game.date}}</td>
             <td>{{game.versus}}</td>
             <td>
-              <form action="/rsvp/{{sport}}" method="POST">
-                <button type="button" class="btn btn-primary btn-lg btn-rsvp">RSVP</button>
-              </form>
+              {% if game.id in game_list %}
+                <form action="/unrsvp/{{game.id}}" method="POST">
+                  <button type="submit" class="btn btn-warning btn-lg btn-rsvp">un-RSVP</button>
+                </form>
+              {% else %}
+                <form action="/rsvp/{{game.id}}" method="POST">
+                  <button type="submit" class="btn btn-primary btn-lg btn-rsvp">RSVP</button>
+                </form>
+              {% endif %}
               <a type="button" class="btn btn-primary btn-lg btn-player" href='/playerlist/{{game.id}}'>see player list</a>
             </td>
           </tr>

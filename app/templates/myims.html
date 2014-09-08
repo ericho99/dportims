@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+  	<br>
+  	<h4>
+	  	{% for game in mygames %}
+	  		<img class="littlecrest" src="../static/imgs/shield.jpeg">
+  		    {% if game.sport == 1%}
+  				men's soccer
+		    {% elif game.sport == 2%}
+		      women's soccer
+		    {% elif game.sport == 3%}
+		      men's football
+		    {% elif game.sport == 4%}
+		      coed football
+		    {% elif game.sport == 5%}
+		      table tennis
+		    {% elif game.sport == 6%}
+		      coed tennis
+		    {% elif game.sport == 7%}
+		      coed volleyball
+		    {% elif game.sport == 8%}
+		      golf
+		    {% elif game.sport == 9%}
+		      cross country
+		    {% endif %}
+		    game on {{game.date}} vs. {{game.versus}}
+	  		<img class="littlecrest" src="../static/imgs/shield.jpeg">
+	  		<br>
+	  	{% endfor %}
+  	</h4>
+  </div>
+{% endblock %}
