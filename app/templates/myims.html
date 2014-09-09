@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
   <div class="container">
+  	<h1>
+  		your games
+  	</h1>
   	<br>
   	<h4>
 	  	{% for game in mygames %}
@@ -24,7 +27,7 @@
 		    {% elif game.sport == 9%}
 		      cross country
 		    {% endif %}
-		    game on {{game.date}} vs. {{game.versus}}
+		    on {{game.date.month}}/{{game.date.day}} vs. {{game.versus}}
 	  		<img class="littlecrest" src="../static/imgs/shield.jpeg">
 	  		<br>
 	  	{% endfor %}

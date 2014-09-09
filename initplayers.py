@@ -1,13 +1,15 @@
 from app import app
 from app.models import *
+from datetime import date
 
+db.drop_all()
 db.create_all()
 
-g1 = Game(sport=1,date='9/3',versus='JE')
+g1 = Game(sport=1,date=date(2014,9,03),versus='JE')
 db.session.add(g1)
-g2 = Game(sport=1,date='9/7',versus='BR')
+g2 = Game(sport=1,date=date(2014,9,07),versus='BR')
 db.session.add(g2)
-g3 = Game(sport=2,date='9/3',versus='JE')
+g3 = Game(sport=2,date=date(2014,9,3),versus='JE')
 db.session.add(g3)
 
 p = Player(email='eric.ho@yale.edu')

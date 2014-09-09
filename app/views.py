@@ -21,12 +21,14 @@ def myims():
     mygames = []
     for g in game_list:
         mygames.append(Game.query.get(g.game_id))
+    mygames = sorted(mygames, key=lambda game: game.date)
     return render_template('myims.html', mygames=mygames)
 
 @app.route('/sports')
 @app.route('/sports/<int:sport>')
 def sports(sport):
     games = Game.query.filter(Game.sport==sport)
+    games = sorted(games, key=lambda game: game.date)
     player_id = 1
     player_att = Attendance.query.filter(Attendance.player_id==player_id)
     game_list = []

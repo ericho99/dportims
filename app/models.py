@@ -1,4 +1,5 @@
 from app import db
+from datetime import date
 
 
 class User(db.Model):
@@ -26,7 +27,7 @@ class Game(db.Model):
     __tablename__ = 'games'
     id = db.Column(db.Integer, primary_key=True)
     sport = db.Column(db.Integer)
-    date = db.Column(db.String(15))
+    date = db.Column(db.Date)
     versus = db.Column(db.String(3))
 
     def __repr__(self):

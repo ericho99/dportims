@@ -25,14 +25,14 @@
     <br>
     <table class="table game-table">
       <thead>
-        <th>Date</th>
+        <th>DATE</th>
         <th>VS</th>
         <th>RSVP</th>
       </thead>
       <tbody>
         {% for game in games %}
           <tr>
-            <td>{{game.date}}</td>
+            <td>{{game.date.month}}/{{game.date.day}}</td>
             <td>{{game.versus}}</td>
             <td>
               {% if game.id in game_list %}

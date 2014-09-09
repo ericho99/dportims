@@ -3,16 +3,21 @@ body{
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
+
+.btn-player{
+	margin-left:15px;
+}
+
+.btn-rsvp{
+	float:left;
+}
+
+.btn.sport-button{
+	padding-top: 28px;
+}
+
 .container{
 	text-align: center;
-}
-.sport-button{
-	height: 100px;
-	width: 200px;
-	margin-top: 15px;
-	margin-left: 5px;
-	margin-right: 5px;
-	padding-top: 40px;
 }
 
 #contact{
@@ -20,33 +25,19 @@ body{
 	margin-top: 150px;
 }
 
-.game-table{
-	margin-left: 100px;
-}
-
-.table.game-table{
-	max-width: 80%;
-}
-
-.btn-rsvp{
-	float:left;
-}
-
-.btn-player{
-	margin-left:15px;
-}
-
-.btn.sport-button{
-	padding-top: 28px;
-}
-
-.littlecrest{
-	height:30px;
-}
-
 #crest{
 	height: 150px;
 	float: left;
+}
+
+.dropdown{
+	float: right;
+	margin-top: 30px;
+	margin-right: 50px;
+}
+
+.game-table{
+	margin-left: 100px;
 }
 
 .header{
@@ -58,15 +49,27 @@ body{
 }
 
 h3{
-	float: middle;
+	position: absolute;
+}
+
+.littlecrest{
+	height:30px;
+}
+
+.sport-button{
+	height: 100px;
+	width: 200px;
+	margin-top: 15px;
+	margin-left: 5px;
+	margin-right: 5px;
+	padding-top: 40px;
+}
+.table.game-table{
+	max-width: 80%;
 }
 
 td{
 	text-align: left;
-}
-
-.dropdown{
-	float: right;
 }
 
 
