@@ -58,7 +58,9 @@
               {% if game.win == 0 %}
                 <span style="color:red">loss</span>
               {% elif game.win == 1 %}
-                <span style="color:blue">win</span>
+                <span style="color:green">win</span>
+              {% elif game.win == 3 %}
+                <span style="color:blue">tie</span>
               {% else %}
                 <span style="color:grey;font-style:italic">not played</span>
               {% endif %}

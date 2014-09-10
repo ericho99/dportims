@@ -29,7 +29,7 @@ class Game(db.Model):
     sport = db.Column(db.Integer)
     date = db.Column(db.DateTime)
     versus = db.Column(db.String(3))
-    win = db.Column(db.Integer) #0 for a loss, 1 for a win, 2 if the game has yet to be played
+    win = db.Column(db.Integer) #0 for a loss, 1 for a win, 2 if the game has yet to be played, 3 for a tie
 
     def __repr__(self):
         return '#%d: Game: %d date: %s versus: %s win: %d' % (self.id, self.sport, self.date, self.versus, self.win)

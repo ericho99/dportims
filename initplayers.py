@@ -13,6 +13,8 @@ g3 = Game(sport=2,date=datetime(2014,9,3,5,00),versus='JE',win=2)
 db.session.add(g3)
 g4 = Game(sport=1,date=datetime(2014,9,01,3,50),versus='BK',win=1)
 db.session.add(g4)
+g5 = Game(sport=1,date=datetime(2014,9,10,3,50),versus='TD',win=3)
+db.session.add(g5)
 
 p = Player(netid='eh425',name='Eric Ho',email='eric.ho@yale.edu')
 db.session.add(p)
