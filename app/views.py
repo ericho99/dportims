@@ -108,7 +108,12 @@ def upcoming():
 
     games = Game.query.filter(Game.win == 2)
     games = sorted(games, key=lambda game: game.date)
-    return render_template('upcoming.html', games=games, user=user)
+    player_id = user.id
+    player_att = Attendance.query.filter(Attendance.player_id==player_id)
+    game_list = []
+    for att in player_att:
+        game_list.append(att.game_id)
+    return render_template('upcoming.html', games=games, game_list=game_list, user=user)
 
 
 @app.route('/rsvp/<int:gameid>', methods = ['POST'])
