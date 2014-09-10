@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block header %}
+    <div class="header">
+      <a href='/'>
+        <img alt="Logo" id="crest" src="../static/imgs/shield.jpeg">
+      </a>
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+          welcome, {{user.name.lower()}}
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu drop" role="menu" aria-labelledby="dropdownMenu1">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="/">home</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="/myims">my IMs</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="/contact">contact us</a></li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="/logout">logout</a></li>
+        </ul>
+      </div>
+    </div>
+    {% block content %}{% endblock %}
+{% endblock %}
