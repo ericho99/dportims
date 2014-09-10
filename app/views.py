@@ -124,7 +124,7 @@ def rsvp(gameid):
         a = Attendance(game_id=gameid,player_id=player_id)
         db.session.add(a)
         db.session.commit()
-    return redirect(url_for('sports',sport=sport))
+    return redirect(redirect_url())
 
 @app.route('/unrsvp/<int:gameid>', methods = ['POST'])
 def unrsvp(gameid):
@@ -134,7 +134,7 @@ def unrsvp(gameid):
     if a is not None:
         db.session.delete(a)
         db.session.commit()
-    return redirect(url_for('sports',sport=sport))
+    return redirect(redirect_url())
 
 @app.route('/textrequest', methods = ['GET','POST'])
 def text_request():

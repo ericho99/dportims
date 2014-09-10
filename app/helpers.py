@@ -13,3 +13,8 @@ def is_user_by_string(string, pid):
 	if get_user_by_string(string, pid) is not None:
 		return True
 	return False
+
+def redirect_url():
+    return request.args.get('next') or \
+           request.referrer or \
+           url_for('index')
