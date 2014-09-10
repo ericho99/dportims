@@ -1,32 +1,94 @@
-from app import app
+from app import app, cas
 from app.models import *
 from app.main import *
 from flask import render_template, url_for
 from flask import Flask, request, redirect
+from flask_cas import CAS
 import twilio.twiml
+import pdb
 
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('page.html')
+    if cas.username is None:
+        return redirect('/login')
+    user = Player.query.filter(Player.netid==cas.username).first()
+    if user is None:
+        return redirect('/newuser')
+    return render_template('page.html',user=user)
 
 @app.route('/contact')
 def contact():
-    return render_template('contact.html')
+    if cas.username is None:
+        return redirect('/login')
+    user = Player.query.filter(Player.netid==cas.username).first()
+    if user is None:
+        return redirect('/newuser')
+    return render_template('contact.html',user=user)
+
+@app.route('/emaillist/<int:gameid>')
+def email_list(gameid):
+    if cas.username is None:
+        return redirect('/login')
+    user = Player.query.filter(Player.netid==cas.username).first()
+    if user is None:
+        return redirect('/newuser')
+
+    game = Game.query.filter(Game.id==gameid).first()
+    att_list = Attendance.query.filter(Attendance.game_id==gameid)
+    player_list = []
+    for att in att_list:
+        player_list.append(Player.query.get(att.player_id).email)
+    return render_template('emaillist.html', game=game, player_list=player_list, user=user)
 
 @app.route('/myims')
 def myims():
+    if cas.username is None:
+        return redirect('/login')
+    user = Player.query.filter(Player.netid==cas.username).first()
+    if user is None:
+        return redirect('/newuser')
+
     player_id = 1
     game_list = Attendance.query.filter(Attendance.player_id==player_id)
     mygames = []
     for g in game_list:
         mygames.append(Game.query.get(g.game_id))
     mygames = sorted(mygames, key=lambda game: game.date)
-    return render_template('myims.html', mygames=mygames)
+    return render_template('myims.html', mygames=mygames ,user=user)
+
+@app.route('/newuser')
+def newuser():
+    if cas.username is None:
+        return redirect('login')
+    if Player.query.filter(Player.netid==cas.username).first() is not None:
+        return redirect('/index')
+    return render_template('newuser.html')
+
+@app.route('/playerlist/<int:gameid>')
+def player_list(gameid):
+    if cas.username is None:
+        return redirect('/login')
+    user = Player.query.filter(Player.netid==cas.username).first()
+    if user is None:
+        return redirect('/newuser')
+
+    game = Game.query.filter(Game.id==gameid).first()
+    att_list = Attendance.query.filter(Attendance.game_id==gameid)
+    player_list = []
+    for att in att_list:
+        player_list.append(Player.query.get(att.player_id).name.lower())
+    return render_template('playerlist.html', game=game, player_list=player_list, user=user)
 
 @app.route('/sports')
 @app.route('/sports/<int:sport>')
 def sports(sport):
+    if cas.username is None:
+        return redirect('/login')
+    user = Player.query.filter(Player.netid==cas.username).first()
+    if user is None:
+        return redirect('/newuser')
+
     games = Game.query.filter(Game.sport==sport)
     games = sorted(games, key=lambda game: game.date)
     player_id = 1
@@ -34,16 +96,20 @@ def sports(sport):
     game_list = []
     for att in player_att:
         game_list.append(att.game_id)
-    return render_template('sport.html', sport=sport, games=games, game_list=game_list)
+    return render_template('sport.html', sport=sport, games=games, game_list=game_list, user=user)
 
-@app.route('/playerlist/<int:gameid>')
-def player_list(gameid):
-    game = Game.query.filter(Game.id==gameid).first()
-    player_list = Attendance.query.filter(Attendance.game_id==gameid)
-    email_list = []
-    for att in player_list:
-        email_list.append(Player.query.get(att.player_id).email)
-    return render_template('playerlist.html', game=game, player_list=email_list)
+@app.route('/upcoming')
+def upcoming():
+    if cas.username is None:
+        return redirect('/login')
+    user = Player.query.filter(Player.netid==cas.username).first()
+    if user is None:
+        return redirect('/newuser')
+
+    games = Game.query.filter(Game.win == 2)
+    games = sorted(games, key=lambda game: game.date)
+    return render_template('upcoming.html', games=games, user=user)
+
 
 @app.route('/rsvp/<int:gameid>', methods = ['POST'])
 def rsvp(gameid):

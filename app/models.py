@@ -1,5 +1,5 @@
 from app import db
-from datetime import date
+from datetime import datetime
 
 
 class User(db.Model):
@@ -27,15 +27,18 @@ class Game(db.Model):
     __tablename__ = 'games'
     id = db.Column(db.Integer, primary_key=True)
     sport = db.Column(db.Integer)
-    date = db.Column(db.Date)
+    date = db.Column(db.DateTime)
     versus = db.Column(db.String(3))
+    win = db.Column(db.Integer) #0 for a loss, 1 for a win, 2 if the game has yet to be played
 
     def __repr__(self):
-        return '#%d: Game: %d date: %s versus: %s' % (self.id, self.sport, self.date, self.versus)
+        return '#%d: Game: %d date: %s versus: %s win: %d' % (self.id, self.sport, self.date, self.versus, self.win)
 
 class Player(db.Model):
     __tablename__ = 'players'
     id = db.Column(db.Integer, primary_key=True)
+    netid = db.Column(db.String(10))
+    name = db.Column(db.String(25))
     email = db.Column(db.String(50))
 
     def __repr__(self):

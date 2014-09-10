@@ -23,7 +23,7 @@
     {% endif %}
     players {{game.date.month}}/{{game.date.day}} {{game.date.hour}}:{% if game.date.minute < 10 %}0{% endif %}{{game.date.minute}} vs. {{game.versus}}
     </h1>
-    <a type="button" class="btn btn-primary btn-lg btn-player" href='/emaillist/{{game.id}}'>show email list</a>
+    <a type="button" class="btn btn-primary btn-lg btn-player" href='/playerlist/{{game.id}}'>show player list</a>
     <br><br>
     <h4>
     {% for player in player_list %}
