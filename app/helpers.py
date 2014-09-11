@@ -1,5 +1,6 @@
 from app import app
 from app.models import *
+from flask import request
 
 def get_user_by_string(string, pid):
 	return User.query.filter(User.name==string).filter(User.panlist_id==pid).first()

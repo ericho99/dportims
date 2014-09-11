@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block header %}
+	<div class="container">
+		<h1>please provide some information about yourself</h1><br>
+		<form action="/newuser" method="post" name="newuser">
+		{{form.hidden_tag()}}
+    	<p>
+	        enter your name (first and last):<br>
+	        {{form.name(size=80)}}<br>
+	        {% for error in form.errors.name %}
+        		<span style="color: red;">[{{error}}]</span>
+        	{% endfor %}<br>
+        	{% if validname == 0 %}
+        		<span style="color: red;">[username taken, try again]</span><br>
+        	{% endif %}
+	    </p>
+	    <p>enter your email (whichever one you prefer to use):<br>
+	    	{{form.email(size=80)}}<br>
+	    	{% for error in form.errors.email %}
+        		<span style="color: red;">[{{error}}]</span>
+        	{% endfor %}<br>
+	    </p>
+	   	<p>enter your cell number (in the form of 10 digits, no parenthesis or spaces):<br>
+	   		note: if you choose to opt out of our text message system, enter 0<br>
+	    	{{form.number(size=80)}}<br>
+	        {% for error in form.errors.number %}
+        		<span style="color: red;">[{{error}}]</span><br>
+        	{% endfor %}
+        	{% if validnumber == 0 %}
+        		<span style="color: red;">[please enter a valid number]</span><br>
+        	{% endif %}
+	    </p>
+	    <p><input type="submit" value="submit" class="btn btn-lg btn-primary"></p>
+		</form>
+	</div>
+{% endblock %}

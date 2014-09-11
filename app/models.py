@@ -28,7 +28,7 @@ class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sport = db.Column(db.Integer)
     date = db.Column(db.DateTime)
-    versus = db.Column(db.String(3))
+    versus = db.Column(db.String(7))
     win = db.Column(db.Integer) #0 for a loss, 1 for a win, 2 if the game has yet to be played, 3 for a tie
 
     def __repr__(self):
@@ -42,7 +42,7 @@ class Player(db.Model):
     email = db.Column(db.String(50))
 
     def __repr__(self):
-        return '#%d: Email: %s' % (self.id, self.email)
+        return '#%d: Netid: %s Name: %s Email: %s' % (self.id, self.netid, self.name, self.email)
 
 class Attendance(db.Model):
     __tablename__ = 'attendances'

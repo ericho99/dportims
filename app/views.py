@@ -1,11 +1,12 @@
 from app import app, cas
 from app.models import *
 from app.main import *
-from flask import render_template, url_for
+from flask import render_template, url_for, flash
 from flask import Flask, request, redirect
 from flask_cas import CAS
+from forms import UserForm
 import twilio.twiml
-import pdb
+import pdb,os
 
 @app.route('/')
 @app.route('/index')
@@ -49,21 +50,41 @@ def myims():
     if user is None:
         return redirect('/newuser')
 
-    player_id = 1
-    game_list = Attendance.query.filter(Attendance.player_id==player_id)
+    game_list = Attendance.query.filter(Attendance.player_id==user.id)
     mygames = []
     for g in game_list:
         mygames.append(Game.query.get(g.game_id))
     mygames = sorted(mygames, key=lambda game: game.date)
     return render_template('myims.html', mygames=mygames ,user=user)
 
-@app.route('/newuser')
+@app.route('/newuser', methods = ['GET', 'POST'])
 def newuser():
     if cas.username is None:
         return redirect('login')
     if Player.query.filter(Player.netid==cas.username).first() is not None:
         return redirect('/index')
-    return render_template('newuser.html')
+
+    form = UserForm()
+    if form.validate_on_submit():
+        if not name_check(form.name.data,1):
+            return render_template('newuser.html',form=form,validnumber=1,validname=0)
+        
+        try:
+            num = int(form.number.data)
+        except:
+            return render_template('newuser.html',form=form,validnumber=0,validname=1)
+        if num != 0:
+            if num >= 10000000000:
+                return render_template('newuser.html',form=form,validnumber=0,validname=1)
+            if not number_check(form.number.data,form.name.data):
+                return render_template('newuser.html',form=form,validnumber=0,validname=1)
+        p = Player(netid=cas.username,name=form.name.data,email=form.email.data)
+        db.session.add(p)
+        u = User(number='+1'+form.number.data,name=form.name.data,admin=0,blocked=0,panlist_id=1)
+        db.session.add(u)
+        db.session.commit()
+        return redirect('/index')
+    return render_template('newuser.html',form=form,validnumber=1,validname=1)
 
 @app.route('/playerlist/<int:gameid>')
 def player_list(gameid):
@@ -91,8 +112,7 @@ def sports(sport):
 
     games = Game.query.filter(Game.sport==sport)
     games = sorted(games, key=lambda game: game.date)
-    player_id = 1
-    player_att = Attendance.query.filter(Attendance.player_id==player_id)
+    player_att = Attendance.query.filter(Attendance.player_id==user.id)
     game_list = []
     for att in player_att:
         game_list.append(att.game_id)
@@ -108,8 +128,7 @@ def upcoming():
 
     games = Game.query.filter(Game.win == 2)
     games = sorted(games, key=lambda game: game.date)
-    player_id = user.id
-    player_att = Attendance.query.filter(Attendance.player_id==player_id)
+    player_att = Attendance.query.filter(Attendance.player_id==user.id)
     game_list = []
     for att in player_att:
         game_list.append(att.game_id)
@@ -118,19 +137,29 @@ def upcoming():
 
 @app.route('/rsvp/<int:gameid>', methods = ['POST'])
 def rsvp(gameid):
+    if cas.username is None:
+        return redirect('/login')
+    user = Player.query.filter(Player.netid==cas.username).first()
+    if user is None:
+        return redirect('/newuser')
+
     sport = Game.query.filter(Game.id==gameid).first().sport
-    player_id = 1
-    if Attendance.query.filter(Attendance.game_id==gameid).filter(Attendance.player_id==player_id).first() is None:
-        a = Attendance(game_id=gameid,player_id=player_id)
+    if Attendance.query.filter(Attendance.game_id==gameid).filter(Attendance.player_id==user.id).first() is None:
+        a = Attendance(game_id=gameid,player_id=user.id)
         db.session.add(a)
         db.session.commit()
     return redirect(redirect_url())
 
 @app.route('/unrsvp/<int:gameid>', methods = ['POST'])
 def unrsvp(gameid):
+    if cas.username is None:
+        return redirect('/login')
+    user = Player.query.filter(Player.netid==cas.username).first()
+    if user is None:
+        return redirect('/newuser')
+
     sport = Game.query.filter(Game.id==gameid).first().sport
-    player_id = 1
-    a = Attendance.query.filter(Attendance.game_id==gameid).filter(Attendance.player_id==player_id).first()
+    a = Attendance.query.filter(Attendance.game_id==gameid).filter(Attendance.player_id==user.id).first()
     if a is not None:
         db.session.delete(a)
         db.session.commit()

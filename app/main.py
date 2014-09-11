@@ -149,6 +149,12 @@ def block(body, pid):
             return 'You have successfully blocked ' + user.name + '.'
     return 'Please specify a valid user to block.'
 
+def check_user(number):
+    try:
+        client.messages.create(to=number, from_=SEND_NUMBER, body='Welcome to Davenport IM Updates!')
+    except:
+        return 'Please enter a valid user/number combo in the form of username:number.'
+
 def deadmin(body, pid):
     user = get_user_by_string(body, pid)
     if user is not None:
@@ -183,6 +189,18 @@ def name_change(body, pid, user):
         db.session.commit()
         return 'Name change successful. Your new name is ' + body + '.'
     return 'Name change failed. The name is taken or is longer than 25 characters.'
+
+def name_check(name, pid):
+    if not is_user_by_string(name, pid) and len(name) < 26 and name != '':
+        return True
+    return False
+
+def number_check(num, name):
+    try:
+        client.messages.create(to='+1'+num, from_=SEND_NUMBER, body='Welcome to Davenport IM Updates, ' + name + '. Text @commands for a list of valid commands, or @leave to leave the group. Messages you send to this number will be sent directly to the Intramural Secretaries.')
+        return True
+    except:
+        return False
 
 def remove(body, pid):
     user = get_user_by_string(body, pid)
