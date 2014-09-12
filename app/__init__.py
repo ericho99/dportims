@@ -9,7 +9,7 @@ cas = CAS(app)
 app.config['CAS_SERVER'] = 'https://secure.its.yale.edu'
 app.config['CAS_LOGIN_ROUTE'] = '/cas/login'
 app.config['CAS_AFTER_LOGIN'] = 'index'
-app.config['SECRET_KEY'] = os.environ['USER_AUTH_SECRET_KEY']
+app.config['SECRET_KEY'] = os.environ['SECRET_KEY_T']
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['FLASK_DATABASE_URL']
 db = SQLAlchemy(app)

@@ -5,6 +5,16 @@
 		<form action="/newuser" method="post" name="newuser">
 		{{form.hidden_tag()}}
     	<p>
+	        enter the davenport password:<br>
+	        {{form.password(size=80)}}<br>
+	        {% for error in form.errors.password %}
+        		<span style="color: red;">[{{error}}]</span>
+        	{% endfor %}<br>
+        	{% if validpass == 0 %}
+        		<span style="color: red;">[wrong password, try again]</span><br>
+        	{% endif %}
+	    </p>
+    	<p>
 	        enter your name (first and last):<br>
 	        {{form.name(size=80)}}<br>
 	        {% for error in form.errors.name %}

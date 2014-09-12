@@ -8,6 +8,8 @@ from forms import UserForm
 import twilio.twiml
 import pdb,os
 
+SECRET_PASS = os.environ['SECRET_KEY_DPORT']
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -66,25 +68,28 @@ def newuser():
 
     form = UserForm()
     if form.validate_on_submit():
+        if form.password.data != SECRET_PASS:
+            return render_template('newuser.html',form=form,validnumber=1,validname=1,validpass=0)
+
         if not name_check(form.name.data,1):
-            return render_template('newuser.html',form=form,validnumber=1,validname=0)
+            return render_template('newuser.html',form=form,validnumber=1,validname=0,validpass=1)
         
         try:
             num = int(form.number.data)
         except:
-            return render_template('newuser.html',form=form,validnumber=0,validname=1)
+            return render_template('newuser.html',form=form,validnumber=0,validname=1,validpass=1)
         if num != 0:
             if num >= 10000000000:
-                return render_template('newuser.html',form=form,validnumber=0,validname=1)
+                return render_template('newuser.html',form=form,validnumber=0,validname=1,validpass=1)
             if not number_check(form.number.data,form.name.data):
-                return render_template('newuser.html',form=form,validnumber=0,validname=1)
+                return render_template('newuser.html',form=form,validnumber=0,validname=1,validpass=1)
         p = Player(netid=cas.username,name=form.name.data,email=form.email.data)
         db.session.add(p)
         u = User(number='+1'+form.number.data,name=form.name.data,admin=0,blocked=0,panlist_id=1)
         db.session.add(u)
         db.session.commit()
         return redirect('/index')
-    return render_template('newuser.html',form=form,validnumber=1,validname=1)
+    return render_template('newuser.html',form=form,validnumber=1,validname=1,validpass=1)
 
 @app.route('/playerlist/<int:gameid>')
 def player_list(gameid):
