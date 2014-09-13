@@ -6,6 +6,7 @@ Flask-Auth==0.85
 Flask-WTF==0.8.4
 Flask-Admin==1.0.6
 Flask-SQLAlchemy==0.16
+Flask-CAS==0.4.3
 google-api-python-client==1.2
 httplib2==0.8
 Jinja2==2.6
