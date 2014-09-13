@@ -7,6 +7,7 @@ db.create_all()
 
 p = Panlist(name='textlist')
 db.session.add(p)
+db.session.commit()
 
 u = User(number='+15038939333',name='Eric Ho',admin=1,blocked=0,panlist_id=1)
 db.session.add(u)
