@@ -1,0 +1,28 @@
+{% extends "header.html" %}
+{% block content %}
+	<div class="container">
+		<h1>edit your profile</h1><br>
+		<form action="/editprofile" method="post" name="editprofile">
+		{{form.hidden_tag()}}
+		<p>
+	        edit your name (first and last name please):<br>
+	        {{form.name(size=80)}}<br>
+	        {% for error in form.errors.name %}
+        		<span style="color: red;">[{{error}}]</span>
+        	{% endfor %}<br>
+        	{% if validname == 0 %}
+        		<span style="color: red;">[username taken, try again]</span><br>
+        	{% endif %}
+	    </p>
+	    <p>edit your email (whichever one you prefer to use):<br>
+	    	{{form.email(size=80)}}<br>
+	    	{% for error in form.errors.email %}
+        		<span style="color: red;">[{{error}}]</span>
+        	{% endfor %}<br>
+	    </p>
+	    <p><input type="submit" value="submit" class="btn btn-lg btn-primary"></p>
+		</form>
+	</div>
+
+
+{% endblock %}

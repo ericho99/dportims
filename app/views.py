@@ -4,7 +4,7 @@ from app.main import *
 from flask import render_template, url_for, flash
 from flask import Flask, request, redirect
 from flask_cas import CAS
-from forms import UserForm
+from forms import UserForm, EditUserForm
 import twilio.twiml
 import pdb,os
 
@@ -28,6 +28,26 @@ def contact():
     if user is None:
         return redirect('/newuser')
     return render_template('contact.html',user=user)
+
+@app.route('/editprofile', methods = ['GET', 'POST'])
+def editprofile():
+    if cas.username is None:
+        return redirect('/login')
+    user = Player.query.filter(Player.netid==cas.username).first()
+    if user is None:
+        return redirect('/newuser')
+
+    form = EditUserForm()
+    if form.validate_on_submit():
+        if not name_check(form.name.data,1):
+            return render_template('editprofile.html',user=user,form=form,validname=0)
+        user.name = form.name.data
+        user.email = form.email.data
+        db.session.commit()
+        return redirect('/index')
+    form.name.data = user.name
+    form.email.data = user.email
+    return render_template('editprofile.html',user=user,form=form,validname=1)
 
 @app.route('/emaillist/<int:gameid>')
 def email_list(gameid):
@@ -85,8 +105,9 @@ def newuser():
                 return render_template('newuser.html',form=form,validnumber=0,validname=1,validpass=1)
         p = Player(netid=cas.username,name=form.name.data,email=form.email.data)
         db.session.add(p)
-        u = User(number='+1'+form.number.data,name=form.name.data,admin=0,blocked=0,panlist_id=1)
-        db.session.add(u)
+        if num != 0:
+            u = User(number='+1'+form.number.data,name=form.name.data,admin=0,blocked=0,panlist_id=1)
+            db.session.add(u)
         db.session.commit()
         return redirect('/index')
     return render_template('newuser.html',form=form,validnumber=1,validname=1,validpass=1)

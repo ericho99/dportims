@@ -7,3 +7,7 @@ class UserForm(Form):
     name = TextField('name', validators = [Required()])
     email = TextField('email', validators = [Required()])
     number = TextField('number', validators = [Required()])
+
+class EditUserForm(Form):
+	name = TextField('name',validators = [Required()])
+	email = TextField('email',validators = [Required()])
