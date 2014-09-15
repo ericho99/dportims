@@ -61,7 +61,7 @@ def email_list(gameid):
     att_list = Attendance.query.filter(Attendance.game_id==gameid)
     player_list = []
     for att in att_list:
-        player_list.append(Player.query.get(att.player_id).email)
+        player_list.append(Player.query.get(att.player_id).email.lower())
     return render_template('emaillist.html', game=game, player_list=player_list, user=user)
 
 @app.route('/myims')
