@@ -135,7 +135,10 @@ def all_command(from_number, body, pid):
         return 'Please enter a valid message.'
 
     for u in User.query.filter(User.panlist_id==pid).filter(User.number!=from_number):
-        client.messages.create(to=u.number, from_=SEND_NUMBER, body=body)
+        try:
+            client.messages.create(to=u.number, from_=SEND_NUMBER, body=body)
+        except:
+            continue
     return 'Mass text successfully sent.'
 
 def block(body, pid):
