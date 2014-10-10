@@ -34,6 +34,7 @@ def main(from_number, message, pid, user):
                    '@all - sends a text to all users' + '\n' + \
                    '@block and @unblock - blocks/unblocks the specified user from the group' + '\n' + \
                    '@commands - brings up a list of commands' + '\n' + \
+                   '@games - brings up the next 5 games' + '\n' + \
                    '@info - shows your username and number' + '\n' + \
                    '@leave - removes yourself from the group' + '\n' + \
                    '@makeadmin - makes the specified user an admin' + '\n' + \
@@ -43,6 +44,8 @@ def main(from_number, message, pid, user):
                    '@user - sends a text to the specified user after the command (message separated by a colon)'
         elif command == '@deadmin':
             return deadmin(body, pid)
+        elif command == '@games':
+            return games()
         elif command == '@info':
             return 'Your username is ' + user.name + '. Stop bothering me.'
         elif command == '@leave':
@@ -83,9 +86,12 @@ def main(from_number, message, pid, user):
                     return 'Here is a list of valid commands:' + '\n' + \
                            '@add - adds a user to the list, in the form of "number:name"' + '\n' + \
                            '@commands - brings up a list of commands' + '\n' + \
+                           '@games - brings up the next 5 games' + '\n' + \
                            '@info - shows your username and number' + '\n' + \
                            '@leave - removes yourself from the group' + '\n' + \
                            '@name - changes name to the following phrase (max 25 chars)'
+                elif command == '@games':
+                    return games()
                 elif command == '@info':
                     return 'Your username is ' + user.name + ' and you are an IM superstar. Don\'t let anyone tell you otherwise.'
                 elif command == '@leave':
@@ -135,10 +141,7 @@ def all_command(from_number, body, pid):
         return 'Please enter a valid message.'
 
     for u in User.query.filter(User.panlist_id==pid).filter(User.number!=from_number):
-        try:
-            client.messages.create(to=u.number, from_=SEND_NUMBER, body=body)
-        except:
-            continue
+        client.messages.create(to=u.number, from_=SEND_NUMBER, body=body)
     return 'Mass text successfully sent.'
 
 def block(body, pid):
@@ -168,6 +171,39 @@ def deadmin(body, pid):
             db.session.commit()
             return 'You have successfully made ' + user.name + ' a regular user.'
     return 'Please specify a valid user to de-admin.'
+
+def games():
+    s = ""
+    games = Game.query.filter(Game.win == 2)
+    games = sorted(games, key=lambda game: game.date)
+    for num in range(0,4):
+        g = games[num]
+        if g is not None:
+            if g.sport == 1:
+                s += "men's soccer"
+            elif g.sport == 2:
+                s += "women's soccer"
+            elif g.sport == 3:
+                s += "men's football"
+            elif g.sport == 4:
+                s += "coed football"
+            elif g.sport == 5:
+                s += "table tennis"
+            elif g.sport == 6:
+                s += "coed tennis"
+            elif g.sport == 7:
+                s += "coed volleyball"
+            elif g.sport == 8:
+                s += "golf"
+            elif g.sport == 9:
+                s += "cross country"
+            s = s + " on " + g.date.month + "/" + g.date.day + " " + g.date.hour + ":"
+            if g.date.minute < 10:
+                s += "0"
+            s += g.date.minute
+            s += "\n"
+    return s
+
 
 def leave(user):
     db.session.delete(user)
