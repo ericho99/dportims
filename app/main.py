@@ -176,7 +176,7 @@ def games():
     s = ""
     games = Game.query.filter(Game.win == 2)
     games = sorted(games, key=lambda game: game.date)
-    for num in range(0,4):
+    for num in range(0,5):
         g = games[num]
         if g is not None:
             if g.sport == 1:
@@ -197,10 +197,10 @@ def games():
                 s += "golf"
             elif g.sport == 9:
                 s += "cross country"
-            s = s + " on " + g.date.month + "/" + g.date.day + " " + g.date.hour + ":"
+            s = s + " on " + str(g.date.month) + "/" + str(g.date.day) + " " + str(g.date.hour) + ":"
             if g.date.minute < 10:
                 s += "0"
-            s += g.date.minute
+            s += str(g.date.minute)
             s += "\n"
     return s
 
