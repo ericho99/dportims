@@ -144,6 +144,15 @@ def sports(sport):
         game_list.append(att.game_id)
     return render_template('sport.html', sport=sport, games=games, game_list=game_list, user=user)
 
+@app.route('/standings')
+def standings():
+    if cas.username is None:
+        return redirect('/login')
+    user = Player.query.filter(Player.netid==cas.username).first()
+    if user is None:
+        return redirect('/newuser')
+    return render_template('standings.html',user=user)
+
 @app.route('/upcoming')
 def upcoming():
     if cas.username is None:

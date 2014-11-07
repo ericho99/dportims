@@ -2,7 +2,7 @@ from app import app
 from app.models import *
 from datetime import datetime
 
-db.drop_all()
+# db.drop_all()
 db.create_all()
 
 p = Panlist(name='textlist')
