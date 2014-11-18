@@ -20,6 +20,30 @@
       golf
     {% elif game.sport == 9%}
       cross country
+    {% elif game.sport == 10%}
+      bowling
+    {% elif game.sport == 11%}
+      innertube water polo  
+    {% elif game.sport == 12%}
+      swimming
+    {% elif game.sport == 13%}
+      ice hockey
+    {% elif game.sport == 14%}
+      men's volleyball
+    {% elif game.sport == 15%}
+      women's volleyball
+    {% elif game.sport == 16%}
+      men's squash
+    {% elif game.sport == 17%}
+      women's squash
+    {% elif game.sport == 18%}
+      a hoops
+    {% elif game.sport == 19%}
+      b hoops
+    {% elif game.sport == 20%}
+      c hoops
+    {% elif game.sport == 21%}
+      women's hoops
     {% endif %}
     players {{game.date.month}}/{{game.date.day}} {{game.date.hour}}:{% if game.date.minute < 10 %}0{% endif %}{{game.date.minute}} vs. {{game.versus}}
     </h1>
