@@ -61,6 +61,13 @@
         <th>RESULT</th>
       </thead>
       <tbody>
+        {% if games == [] %}
+          <tr>
+            <td>
+              <strong>games times TBD</strong>
+            </td>
+          </tr>
+        {% endif %}
         {% for game in games %}
           <tr>
             <td>{{game.date.month}}/{{game.date.day}} {{game.date.hour}}:{% if game.date.minute < 10 %}0{% endif %}{{game.date.minute}}</td>
