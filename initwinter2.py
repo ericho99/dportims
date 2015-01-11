@@ -26,3 +26,5 @@ db.session.add(g8)
 db.session.add(g9)
 db.session.add(g10)
 db.session.add(g11)
+
+db.session.commit()
