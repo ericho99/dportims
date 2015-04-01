@@ -51,6 +51,22 @@
 			      c hoops
 			    {% elif game.sport == 21%}
 			      women's hoops
+			    {% elif game.sport == 22%}
+			      softball
+			    {% elif game.sport == 23%}
+			      ultimate
+			    {% elif game.sport == 24%}
+			      golf
+			    {% elif game.sport == 25%}
+			      billiards
+			    {% elif game.sport == 26%}
+			      volleyball
+			    {% elif game.sport == 27%}
+			      badminton
+			    {% elif game.sport == 28%}
+			      soccer
+			    {% elif game.sport == 29%}
+			      dodgeball
 			    {% endif %}
 			    on {{game.date.month}}/{{game.date.day}} {{game.date.hour}}:{% if game.date.minute < 10 %}0{% endif %}{{game.date.minute}} vs. {{game.versus}}
 		  		<br>
