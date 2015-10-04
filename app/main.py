@@ -197,6 +197,47 @@ def games():
                 s += "golf"
             elif g.sport == 9:
                 s += "cross country"
+            elif g.sport == 10:
+                s += "bowling"
+            elif g.sport == 11:
+                s += "innertube water polo"
+            elif g.sport == 12:
+                s += "swimming"
+            elif g.sport == 13:
+                s += "ice hockey"
+            elif g.sport == 14:
+                s += "men's volleyball"
+            elif g.sport == 15:
+                s += "women's volleyball"
+            elif g.sport == 16:
+                s += "men's squash"
+            elif g.sport == 17:
+                s += "women's squash"
+            elif g.sport == 18:
+                s += "a hoops"
+            elif g.sport == 19:
+                s += "b hoops"            
+            elif g.sport == 20:
+                s += "c hoops"
+            elif g.sport == 21:
+                s += "women's hoops"
+            elif g.sport == 22:
+                s += "softball"
+            elif g.sport == 23:
+                s += "ultimate"
+            elif g.sport == 24:
+                s += "golf"
+            elif g.sport == 25:
+                s += "billiards"
+            elif g.sport == 26:
+                s += "volleyball"
+            elif g.sport == 27:
+                s += "badminton"
+            elif g.sport == 28:
+                s += "soccer"
+            elif g.sport == 29:
+                s += "dodgeball" 
+
             s = s + " on " + str(g.date.month) + "/" + str(g.date.day) + " " + str(g.date.hour) + ":"
             if g.date.minute < 10:
                 s += "0"
